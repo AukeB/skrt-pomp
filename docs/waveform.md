@@ -1,6 +1,6 @@
 # waveform
 
-A waveform is the shape of a sound over one cycle. The shape decides the timbre, which is the quality that tells a flute from a trumpet playing the same note. The `waveform` module will turn a frequency and a number of samples into an array of values between -1 and 1, one value per sample. The first waveform is the pulse wave, and its main control is the duty cycle.
+A waveform is the shape of a sound over one cycle. The shape decides the timbre, which is the quality that tells a flute from a trumpet playing the same note. The `waveform` module turns a frequency and a time axis into an array of values between -1 and 1, one value per sample. It has three waveforms: the pulse wave, whose main control is the duty cycle, the triangle wave, and the noise wave.
 
 ## Phase
 
@@ -56,7 +56,7 @@ The hardware produced the duty by stepping through an 8-step pattern of high and
 
 ## Duty in code
 
-The pulse wave in our code will compute the phase, and then compare it to the duty:
+The pulse wave in our code computes the phase, and then compares it to the duty:
 
 ```python
 phase = (t * frequency) % 1.0
@@ -65,3 +65,25 @@ value = np.where(high, 1.0, -1.0)
 ```
 
 The `high` array is `True` for the samples in the first part of each cycle. `np.where` turns those samples into +1 and the rest into -1.
+
+## Triangle wave
+
+A triangle wave rises in a straight line from -1 to +1 and falls back again, once per cycle. Its value is:
+
+```
+value = 2 * |2 * phase - 1| - 1
+```
+
+The wave starts at +1, reaches -1 halfway through the cycle, and crosses zero at a quarter and three-quarters of the way through.
+
+The triangle has no sharp edges. Its harmonics are only the odd ones, and each one is much weaker than the one before it, falling off with the square of the harmonic number. That gives a soft, rounded sound, close to a sine wave but with a little more body. This is why the NES used it for bass: it sounds clear at low pitches without the buzz of a square.
+
+The NES triangle channel had no volume control, so its level was always the same. Our version is a continuous triangle rather than the NES's 32 steps, which sounds nearly identical at normal listening levels.
+
+## Noise wave
+
+Noise has no pitch. Its samples are random values between -1 and +1, with no repeating cycle. Every frequency is present at roughly equal strength, which is why it sounds like hiss, the same as static on a radio.
+
+Our noise wave uses a seeded random generator, so the same seed always gives the same samples. That makes tests and renders repeatable. The time axis only sets how many samples are made; the noise doesn't depend on a frequency.
+
+The NES made its noise differently, with a shift register that repeats after a fixed number of steps. That gives the metallic buzz of its short mode, which random noise doesn't have. That version is not implemented yet.

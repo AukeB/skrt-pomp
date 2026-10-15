@@ -16,9 +16,9 @@ Parse names like `C#4` or `Bb3` into Hz, using A4 = 440 Hz and 12-tone equal tem
 Functions that turn a frequency and a number of samples into an array, starting with the pulse wave with a duty cycle, then triangle and noise. This is the code we already wrote, moved into tested functions.
 
 - [x] 7. `make_time_axis(duration, sample_rate)` builds the time of each sample. It takes no frequency; each waveform applies its own frequency to the time axis.
-- [ ] 8. A pulse wave with a duty-cycle argument, tested on the fraction of high samples (for example 25% duty gives about 25% high).
-- [ ] 9. A triangle wave, tested on its peak values staying within −1 to 1.
-- [ ] 10. A noise generator with a fixed seed, so tests are repeatable. Later this becomes the LFSR version.
+- [x] 8. A pulse wave with a duty-cycle argument, tested on the fraction of high samples (for example 25% duty gives about 25% high).
+- [x] 9. A triangle wave, tested on its peak values staying within −1 to 1.
+- [x] 10. A noise generator with a fixed seed, so tests are repeatable. Later this becomes the LFSR version.
 
 ## Score model (`skrt_pomp/score.py`)
 
