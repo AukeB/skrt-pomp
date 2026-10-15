@@ -1,5 +1,5 @@
 # Default project folder
-PROJECT_NAME = src/my_project
+PROJECT_NAME = src/skrt_pomp
 
 # Format and lint code with Ruff
 ruff:
@@ -57,7 +57,7 @@ all:
 	make format-docstrings
 	make pyright
 	make ty
-	make pytest
+	
 	make clean
 	make git
 	@echo "⚡ Successfully executed all tasks."

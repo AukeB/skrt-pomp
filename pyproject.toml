@@ -1,12 +1,12 @@
 [project]
-name = "template-repo"
+name = "skrt-pomp"
 version = "0.1.0"
-description = "Template repository"
+description = "Creating chiptune music with Python, inspired by old video game consoles such as the NES."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "numpy>=2.5.4",
     "pydantic>=2.12.3",
-    "pyyaml>=6.0.3",
 ]
 
 [dependency-groups]
