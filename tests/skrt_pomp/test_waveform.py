@@ -161,3 +161,17 @@ def test_make_noise_wave_has_roughly_zero_mean_and_uniform_spread() -> None:
     samples = make_noise_wave(time_axis, seed=4)
     assert np.mean(samples) == pytest.approx(0.0, abs=0.01)
     assert np.std(samples) == pytest.approx(1 / np.sqrt(3), abs=0.01)
+
+
+def test_make_pulse_wave_duty_zero_is_always_low() -> None:
+    """A duty of 0 never goes high."""
+    time_axis = make_time_axis(0.1, 44100)
+    samples = make_pulse_wave(440.0, time_axis, 0.0)
+    np.testing.assert_array_equal(samples, np.full(time_axis.size, -1.0))
+
+
+def test_make_pulse_wave_duty_one_is_always_high() -> None:
+    """A duty of 1 is high for the whole cycle."""
+    time_axis = make_time_axis(0.1, 44100)
+    samples = make_pulse_wave(440.0, time_axis, 1.0)
+    np.testing.assert_array_equal(samples, np.full(time_axis.size, 1.0))
