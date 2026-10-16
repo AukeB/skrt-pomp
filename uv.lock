@@ -195,15 +195,15 @@ wheels = [
 
 [[package]]
 name = "docstring-tailor"
-version = "0.4.0"
+version = "0.4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "libcst" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6a/26/ad58641b3fcf8dae7efd27ded8b86a8c474560011f740f61e1c38a46e696/docstring_tailor-0.4.0.tar.gz", hash = "sha256:8522fae6fcaf19af9ae18d67cab1def009cfb46f3f40ea4f72db568a64f7c8e1", size = 107814, upload-time = "2026-07-24T19:21:25.099Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/97/eb/cbf6ada270c63510bb31e1a960965132372e4835479c4b6fac85f3888a76/docstring_tailor-0.4.1.tar.gz", hash = "sha256:3a3eb3c2d2ce36558d937c232495d8e1258db21faa07bb62ff135eb8de231aed", size = 116383, upload-time = "2026-09-12T20:04:36.404Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a1/72/afc3a9d96093776d74d4b9322e8879524588c993cbd0c7318d8e78ce27c7/docstring_tailor-0.4.0-py3-none-any.whl", hash = "sha256:0fd568c6ec2faab221c15d0723ee6e187204639a5c296dee403b4b06c2e17ffa", size = 67474, upload-time = "2026-07-24T19:21:23.61Z" },
+    { url = "https://files.pythonhosted.org/packages/94/29/cfcecd95193df38c94b38933fadc8db48e63244b8c76236430e76c02d968/docstring_tailor-0.4.1-py3-none-any.whl", hash = "sha256:56ae72bbcafecd77374432795ea830c34931bed5c79cad783d14a6f30f7dab2b", size = 70393, upload-time = "2026-09-12T20:04:35.02Z" },
 ]
 
 [[package]]
@@ -677,7 +677,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "docstring-tailor", specifier = ">=0.4.0" },
+    { name = "docstring-tailor", specifier = ">=0.4.1" },
     { name = "pyright", specifier = ">=1.1.414" },
     { name = "pytest", specifier = ">=8.4.2" },
     { name = "pytest-cov", specifier = ">=7.1.0" },
