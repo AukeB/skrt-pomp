@@ -29,6 +29,7 @@ ty:
 pytest:
 	uv run pytest tests -vvvs \
 		--cov=$(PROJECT_NAME) \
+		--cov-branch \
 		--cov-report=term-missing
 	@echo "🧪 Successfully executed pytest."
 
