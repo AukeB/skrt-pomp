@@ -3,8 +3,8 @@
 import numpy as np
 import sounddevice as sd
 
-from src.skrt_pomp.pitch import name_to_frequency
-from src.skrt_pomp.waveform import (
+from skrt_pomp.pitch import name_to_frequency
+from skrt_pomp.waveform import (
     NES_DUTY_50,
     make_noise_wave,
     make_pulse_wave,
@@ -38,6 +38,7 @@ def _apply_fade(samples: np.ndarray) -> np.ndarray:
     Returns:
         faded (np.ndarray): The note with a short fade at each end.
     """
+
     fade_samples = round(FADE_SECONDS * SAMPLE_RATE)
     ramp = np.linspace(0.0, 1.0, fade_samples)
     faded = samples.copy()
@@ -57,6 +58,7 @@ def _render_note(name: str) -> np.ndarray:
     Returns:
         samples (np.ndarray): The note as audio samples.
     """
+
     frequency = name_to_frequency(name)
     time_axis = make_time_axis(SIXTEENTH_NOTE_SECONDS, SAMPLE_RATE)
     samples = LEAD_VOLUME * make_pulse_wave(frequency, time_axis, NES_DUTY_50)
@@ -75,6 +77,7 @@ def _render_bass_note(name: str) -> np.ndarray:
     Returns:
         samples (np.ndarray): The note as audio samples.
     """
+
     frequency = name_to_frequency(name)
     time_axis = make_time_axis(SIXTEENTH_NOTE_SECONDS, SAMPLE_RATE)
     samples = BASS_VOLUME * make_triangle_wave(frequency, time_axis)
@@ -90,6 +93,7 @@ def _render_snare_hit() -> np.ndarray:
     Returns:
         hit (np.ndarray): The snare hit as audio samples.
     """
+
     time_axis = make_time_axis(SNARE_DURATION_SECONDS, SAMPLE_RATE)
     noise = make_noise_wave(time_axis, seed=SNARE_SEED)
     envelope = np.exp(-SNARE_DECAY * time_axis)
@@ -108,6 +112,7 @@ def _render_snare(total_samples: int) -> np.ndarray:
     Returns:
         snare (np.ndarray): The snare track, the same length as the riff.
     """
+
     snare = np.zeros(total_samples)
     hit = _render_snare_hit()
 
@@ -126,6 +131,7 @@ def _render_riff() -> np.ndarray:
     Returns:
         riff (np.ndarray): The whole riff as audio samples.
     """
+
     lead_notes = [_render_note(name) for name in RIFF_NOTES]
     lead = np.concatenate(lead_notes)
     bass_notes = [_render_bass_note(name) for name in RIFF_NOTES]

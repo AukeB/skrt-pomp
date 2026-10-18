@@ -2,7 +2,7 @@
 
 import re
 
-from src.skrt_pomp.errors import InvalidNoteNameError
+from skrt_pomp.errors import InvalidNoteNameError
 
 _NOTE_NAME_PATTERN = re.compile(r"([A-G])([#b]?)(-?\d+)")
 _MIN_OCTAVE = -1
@@ -27,6 +27,7 @@ def _get_semitone_offset(letter: str) -> int:
     Raises:
         InvalidNoteNameError: If the letter is not from A to G.
     """
+
     if letter not in _SEMITONE_OFFSETS:
         raise InvalidNoteNameError(f"Invalid note letter: {letter!r}")
 
@@ -47,6 +48,7 @@ def _get_accidental_offset(accidental: str) -> int:
     Raises:
         InvalidNoteNameError: If the accidental is not "#", "b", or "".
     """
+
     if accidental not in _ACCIDENTAL_OFFSETS:
         raise InvalidNoteNameError(f"Invalid accidental: {accidental!r}")
 
@@ -69,6 +71,7 @@ def _parse_note_name(name: str) -> tuple[str, str, int]:
         InvalidNoteNameError: If the name is not a letter followed by an octave,
             or if the octave is outside the MIDI range of -1 to 9.
     """
+
     match = _NOTE_NAME_PATTERN.fullmatch(name)
 
     if match is None:
@@ -102,6 +105,7 @@ def _name_to_midi(name: str) -> int:
         InvalidNoteNameError: If the name is invalid or its MIDI number falls
             outside 0 to 127.
     """
+
     letter, accidental, octave = _parse_note_name(name)
     semitone_offset = _get_semitone_offset(letter)
     accidental_offset = _get_accidental_offset(accidental)
@@ -124,6 +128,7 @@ def _midi_to_frequency(midi_number: int) -> float:
     Returns:
         frequency (float): The frequency of the note in Hz.
     """
+
     semitones_from_a4 = midi_number - _A4_MIDI_NUMBER
     frequency = _A4_FREQUENCY * 2 ** (semitones_from_a4 / 12)
 
@@ -151,6 +156,7 @@ def name_to_frequency(name: str) -> float:
         >>> round(name_to_frequency("C4"), 2)
         261.63
     """
+
     midi_number = _name_to_midi(name)
     frequency = _midi_to_frequency(midi_number)
 

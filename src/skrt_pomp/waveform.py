@@ -19,7 +19,7 @@ Example:
 
 import numpy as np
 
-from src.skrt_pomp.errors import InvalidAudioParameterError
+from skrt_pomp.errors import InvalidAudioParameterError
 
 NES_DUTY_12_5 = 0.125
 NES_DUTY_25 = 0.25
@@ -36,6 +36,7 @@ def _validate_frequency(frequency: float) -> None:
     Raises:
         InvalidAudioParameterError: If the frequency is not above zero.
     """
+
     if frequency <= 0:
         raise InvalidAudioParameterError(f"Frequency must be above zero: {frequency}")
 
@@ -59,6 +60,7 @@ def make_time_axis(duration: float, sample_rate: int) -> np.ndarray:
         >>> make_time_axis(0.5, 4)
         array([0.  , 0.25])
     """
+
     if duration < 0:
         raise InvalidAudioParameterError(f"Duration must not be negative: {duration}")
 
@@ -90,6 +92,7 @@ def make_pulse_wave(frequency: float, time_axis: np.ndarray, duty: float) -> np.
         InvalidAudioParameterError: If the frequency is not above zero or the
             duty is outside 0 to 1.
     """
+
     _validate_frequency(frequency)
 
     if not 0 <= duty <= 1:
@@ -117,6 +120,7 @@ def make_triangle_wave(frequency: float, time_axis: np.ndarray) -> np.ndarray:
     Raises:
         InvalidAudioParameterError: If the frequency is not above zero.
     """
+
     _validate_frequency(frequency)
 
     phase = (time_axis * frequency) % 1.0
@@ -138,6 +142,7 @@ def make_noise_wave(time_axis: np.ndarray, seed: int) -> np.ndarray:
     Returns:
         samples (np.ndarray): Random values evenly spread from -1 to +1.
     """
+
     rng = np.random.default_rng(seed)
     samples = rng.uniform(-1.0, 1.0, time_axis.size)
 

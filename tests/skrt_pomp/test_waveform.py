@@ -3,8 +3,8 @@
 import numpy as np
 import pytest
 
-from src.skrt_pomp.errors import InvalidAudioParameterError
-from src.skrt_pomp.waveform import (
+from skrt_pomp.errors import InvalidAudioParameterError
+from skrt_pomp.waveform import (
     NES_DUTY_12_5,
     NES_DUTY_25,
     NES_DUTY_50,
@@ -45,7 +45,13 @@ def test_make_time_axis_zero_duration_is_empty() -> None:
 
 @pytest.mark.parametrize(("duration", "sample_rate"), [(-0.1, 44100), (0.5, 0), (0.5, -44100)])
 def test_make_time_axis_rejects_invalid_parameters(duration: float, sample_rate: int) -> None:
-    """A negative duration, or a sample rate that is not above zero, raises an error."""
+    """A negative duration, or a sample rate that is not above zero, raises an error.
+
+    Args:
+        duration (float): The duration in seconds, which may be negative.
+        sample_rate (int): The sample rate, which may be zero or negative.
+    """
+
     with pytest.raises(InvalidAudioParameterError):
         make_time_axis(duration, sample_rate)
 
@@ -57,7 +63,12 @@ def test_make_time_axis_rejects_invalid_parameters(duration: float, sample_rate:
     "duty", [NES_DUTY_12_5, NES_DUTY_25, NES_DUTY_50, NES_DUTY_75]
 )
 def test_make_pulse_wave_fraction_high_matches_duty(duty: float) -> None:
-    """Over whole cycles, the share of high samples equals the duty."""
+    """Over whole cycles, the share of high samples equals the duty.
+
+    Args:
+        duty (float): The duty cycle, from 0 to 1.
+    """
+
     time_axis = make_time_axis(1.0, 8000)
     samples = make_pulse_wave(100.0, time_axis, duty)
     high_fraction = np.mean(samples > 0)
@@ -68,7 +79,9 @@ def test_make_pulse_wave_only_takes_two_values() -> None:
     """Every sample is either +1 or -1."""
     time_axis = make_time_axis(0.1, 44100)
     samples = make_pulse_wave(440.0, time_axis, NES_DUTY_50)
-    np.testing.assert_array_equal(np.unique(samples), [-1.0, 1.0])
+    unique_values = np.unique(samples)
+
+    np.testing.assert_array_equal(unique_values, [-1.0, 1.0])
 
 
 def test_make_pulse_wave_starts_high() -> None:
@@ -87,8 +100,15 @@ def test_make_pulse_wave_has_one_sample_per_time_point() -> None:
 
 @pytest.mark.parametrize(("frequency", "duty"), [(0.0, 0.5), (-440.0, 0.5), (440.0, -0.1), (440.0, 1.1)])
 def test_make_pulse_wave_rejects_invalid_parameters(frequency: float, duty: float) -> None:
-    """A frequency that is not above zero, or a duty outside 0 to 1, raises an error."""
+    """A frequency that is not above zero, or a duty outside 0 to 1, raises an error.
+
+    Args:
+        frequency (float): The frequency in Hz, which may be zero or negative.
+        duty (float): The duty cycle, which may fall outside 0 to 1.
+    """
+
     time_axis = make_time_axis(0.1, 44100)
+
     with pytest.raises(InvalidAudioParameterError):
         make_pulse_wave(frequency, time_axis, duty)
 
@@ -115,8 +135,14 @@ def test_make_triangle_wave_hits_peaks_and_trough() -> None:
 
 @pytest.mark.parametrize("frequency", [0.0, -440.0])
 def test_make_triangle_wave_rejects_invalid_frequency(frequency: float) -> None:
-    """A frequency that is not above zero raises an error."""
+    """A frequency that is not above zero raises an error.
+
+    Args:
+        frequency (float): The frequency in Hz, which may be zero or negative.
+    """
+
     time_axis = make_time_axis(0.1, 44100)
+
     with pytest.raises(InvalidAudioParameterError):
         make_triangle_wave(frequency, time_axis)
 
@@ -160,18 +186,25 @@ def test_make_noise_wave_has_roughly_zero_mean_and_uniform_spread() -> None:
     time_axis = make_time_axis(1.0, 44100)
     samples = make_noise_wave(time_axis, seed=4)
     assert np.mean(samples) == pytest.approx(0.0, abs=0.01)
-    assert np.std(samples) == pytest.approx(1 / np.sqrt(3), abs=0.01)
+    spread = np.std(samples)
+    expected_spread = 1 / np.sqrt(3)
+
+    assert spread == pytest.approx(expected_spread, abs=0.01)
 
 
 def test_make_pulse_wave_duty_zero_is_always_low() -> None:
     """A duty of 0 never goes high."""
     time_axis = make_time_axis(0.1, 44100)
     samples = make_pulse_wave(440.0, time_axis, 0.0)
-    np.testing.assert_array_equal(samples, np.full(time_axis.size, -1.0))
+    expected = np.full(time_axis.size, -1.0)
+
+    np.testing.assert_array_equal(samples, expected)
 
 
 def test_make_pulse_wave_duty_one_is_always_high() -> None:
     """A duty of 1 is high for the whole cycle."""
     time_axis = make_time_axis(0.1, 44100)
     samples = make_pulse_wave(440.0, time_axis, 1.0)
-    np.testing.assert_array_equal(samples, np.full(time_axis.size, 1.0))
+    expected = np.full(time_axis.size, 1.0)
+
+    np.testing.assert_array_equal(samples, expected)
